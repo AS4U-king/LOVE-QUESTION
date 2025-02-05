@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Box</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .love-box {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            border: 3px solid #ff3366;
+        }
+        h2 {
+            color: #ff3366;
+            font-size: 24px;
+        }
+        .buttons {
+            margin-top: 20px;
+            position: relative;
+        }
+        button {
+            padding: 12px 25px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .yes {
+            background-color: #ff3366;
+            color: white;
+        }
+        .yes:hover {
+            background-color: #ff1a4d;
+        }
+        .no {
+            background-color: gray;
+            color: white;
+            position: absolute;
+        }
+        .no:hover {
+            background-color: darkgray;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: linear-gradient(135deg, #ff0000, #005eff);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            opacity: 0;
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+            color: rgb(255, 255, 255);
+            font-size: 22px;
+            font-weight: bold;
+            border: 3px solid white;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            0% { box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); }
+            100% { box-shadow: 0px 0px 20px rgba(255, 255, 255, 1); }
+        }
+        .popup.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        .popup button {
+            margin-top: 15px;
+            background-color: white;
+            color: #ff3366;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 14px;
+            color: white;
+            opacity: 0.7;
+        }
+    
+        .popup button:hover {
+            background-color: #ff3366;
+            color: white;
+        }
+        .heart {
+            font-size: 40px;
+            animation: heartbeat 1s infinite alternate;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="love-box">
+        <h2>Do you love me? ❤️</h2>
+        <div class="buttons">
+            <button class="yes" onclick="sendEmail(); partyPopper();">Yes</button>
+            <button class="no" onclick="moveNoButton()">No</button>
+        </div>
+    </div>
+    
+    <div id="popup" class="popup">
+        <h1>Congratulations 🎉, You are now Ankit's GF 🥳</h1>
+        <button onclick="closePopup()">OK</button>
+    </div>
+    <div class="watermark">Created by Ankit</div>
+    <script>
+        (function() {
+            emailjs.init("bk7cKBzv2Z0N_dWXF"); 
+        })();
+
+        function sendEmail() {
+            emailjs.send("lovequation-2007", "template_03kv9wb", {
+                to_name: "Ankit",
+                message: "Someone said 'Yes' to loving you! ❤️",
+                reply_to: "hobekichu@gmail.com"
+            }).then(function(response) {
+                alert("Love you too ❤️");  
+                showPopup();
+            }, function(error) {
+                console.error("Error:", error);
+                showPopup();
+            });
+        }
+
+        function showPopup() {
+            let popup = document.getElementById("popup");
+            popup.style.display = "block";
+            setTimeout(() => {
+                popup.classList.add("show");
+            }, 10);
+        }
+        
+        function closePopup() {
+            let popup = document.getElementById("popup");
+            popup.classList.remove("show");
+            setTimeout(() => {
+                popup.style.display = "none";
+            }, 300);
+        }
+
+        function moveNoButton() {
+            let noButton = document.querySelector('.no');
+            noButton.classList.add('shake');
+            setTimeout(() => {
+                noButton.classList.remove('shake');
+                let x = Math.random() * (window.innerWidth - 100);
+                let y = Math.random() * (window.innerHeight - 50);
+                noButton.style.left = `${x}px`;
+                noButton.style.top = `${y}px`;
+            }, 300);
+        }
+
+        function partyPopper() {
+            confetti({
+                particleCount: 300,
+                spread: 120,
+                startVelocity: 50,
+                origin: { y: 0.6 }
+            });
+        }
+    </script>
+</body>
+</html>
